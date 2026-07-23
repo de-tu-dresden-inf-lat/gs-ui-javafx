@@ -181,6 +181,7 @@ public class FxDefaultView extends FxViewPanel {
 
 	
 	public void close(GraphicGraph graph) {
+		System.out.println("Closing the view"); //debug log
 		renderer.close();
 		graph.setAttribute("ui.viewClosed", getIdView());
 
