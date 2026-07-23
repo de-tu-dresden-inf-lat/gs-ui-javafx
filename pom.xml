@@ -76,31 +76,37 @@
 	
 	<profiles>
 		<profile>
-			<!--
-				This profile has to be enabled when releasing the package. It will
-				enable the sign phase.
-			-->
-			<id>release</id>
-			<distributionManagement>
-				<repository>
-					<id>ossrh</id>
-					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-				</repository>
-			</distributionManagement>
+			 <!-- This profile has to be enabled when releasing the package. It will 
+				enable the sign & publishing phase. -->
+			<id>sonatypeDeploy</id>
 			<build>
 				<plugins>
+				    <plugin>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
+						<version>0.3.0</version>
+						<extensions>true</extensions>
+						<configuration>
+							<publishingServerId>central</publishingServerId>
+							<tokenAuth>true</tokenAuth>
+							<autoPublish>true</autoPublish>
+							<waitUntil>published</waitUntil>
+						</configuration>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.6</version>
+						<version>3.1.0</version>
 						<configuration>
-							<keyname><![CDATA[GraphStream Team <team@graphstream-project.org>]]></keyname>
-							<skip>false</skip>
+							<gpgArguments>
+								<arg>--pinentry-mode</arg>
+								<arg>loopback</arg>
+							</gpgArguments>
 						</configuration>
 						<executions>
-							<execution>
+							<execution>             
 								<id>sign-artifacts</id>
-								<phase>package</phase>
+								<phase>verify</phase>
 								<goals>
 									<goal>sign</goal>
 								</goals>
